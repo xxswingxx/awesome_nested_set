@@ -21,7 +21,7 @@ module CollectiveIdea #:nodoc:
         #       "#{'–' * i.level} #{i.name}"
         #     }) %>
         #
-        def nested_set_options(class_or_item, mover = nil)
+        def nested_set_options(class_or_item, blacklist = nil, mover = nil)
           if class_or_item.is_a? Array
             items = class_or_item.reject { |e| !e.root? }
           else
@@ -31,8 +31,16 @@ module CollectiveIdea #:nodoc:
           result = []
           items.each do |root|
             result += root.class.associate_parents(root.self_and_descendants).map do |i|
-              if mover.nil? || mover.new_record? || mover.move_possible?(i)
-                [yield(i), i.id]
+              if blacklist.present?
+                blacklist.each do |element|
+                  if element.new_record? || element.move_possible?(i)
+                    [yield(i), i.id]
+                  end
+                end
+              else
+                if mover.nil? || mover.new_record? || mover.move_possible?(i)
+                  [yield(i), i.id]
+                end
               end
             end.compact
           end

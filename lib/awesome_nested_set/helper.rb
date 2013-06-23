@@ -21,7 +21,7 @@ module CollectiveIdea #:nodoc:
         #       "#{'–' * i.level} #{i.name}"
         #     }) %>
         #
-        def nested_set_options(class_or_item, blacklist = nil, mover = nil)
+        def nested_set_options(class_or_item, mover = nil, blacklist = nil)
           if class_or_item.is_a? Array
             items = class_or_item.reject { |e| !e.root? }
           else

@@ -32,7 +32,7 @@ module CollectiveIdea #:nodoc:
           items.each do |root|
             result += root.class.associate_parents(root.self_and_descendants).map do |i|
               blacklist.each do |element|
-                if element.new_record? || element.move_possible?(i)
+                if element.new_record?
                   [yield(i), i.id]
                 end
               end
